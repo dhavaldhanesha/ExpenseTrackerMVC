@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ExpenseTrackerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="category">
+    <Key>
+      <PropertyRef Name="categoryId" />
+    </Key>
+    <Property Name="categoryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="categoryName" Type="nchar" MaxLength="20" Nullable="false" />
+    <Property Name="categoryExpense" Type="int" Nullable="false" />
+    <Property Name="categoryLimit" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="expense">
+    <Key>
+      <PropertyRef Name="expenseId" />
+    </Key>
+    <Property Name="expenseId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="expenseTitle" Type="nchar" MaxLength="20" Nullable="false" />
+    <Property Name="expenseDesription" Type="nchar" MaxLength="50" Nullable="false" />
+    <Property Name="categoryId" Type="int" Nullable="false" />
+    <Property Name="expenseAmount" Type="int" Nullable="false" />
+    <Property Name="date" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ExpenseLimit">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="totalExpenseLimit" Type="int" Nullable="false" />
+    <Property Name="actualExpense" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_expense_category">
+    <End Role="category" Type="Self.category" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="expense" Type="Self.expense" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="category">
+        <PropertyRef Name="categoryId" />
+      </Principal>
+      <Dependent Role="expense">
+        <PropertyRef Name="categoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ExpenseTrackerModelStoreContainer">
+    <EntitySet Name="category" EntityType="Self.category" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="expense" EntityType="Self.expense" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ExpenseLimit" EntityType="Self.ExpenseLimit" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_expense_category" Association="Self.FK_expense_category">
+      <End Role="category" EntitySet="category" />
+      <End Role="expense" EntitySet="expense" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
